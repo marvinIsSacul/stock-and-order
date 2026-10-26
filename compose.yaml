@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: orderflow
+      POSTGRES_PASSWORD: orderflow
+      POSTGRES_DB: orderflow
+    ports:
+      - "55432:5432" # unusual host port, so it won't clash with a local Postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orderflow -d orderflow"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
